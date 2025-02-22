@@ -30,7 +30,7 @@ Welcome to the AI Chatbot Application repository! This project is an AI-powered 
 2. Interact with the chatbot by typing your queries.
 3. Your conversation history will be saved and can be accessed later.
 
-For any inquiries or feedback, please contact [afsal Madathingal](https://www.linkedin.com/in/afsalmadathingal/).
+For any inquiries or feedback, please contact [S.G.SAJEENA](https://www.linkedin.com/in/sajeena-suresh-578b15258).
 
 
 

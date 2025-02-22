@@ -1,0 +1,91 @@
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style/login.css">
+
+
+<div  class="login-box">
+
+    <img style="display: block; margin-left: auto; margin-right: auto; width: 100px;" src="/images/logo.png" alt="">
+
+    <h1 style="color: white; text-align: center">Welcome to Neos AI</h1>
+    <p style="text-align: center; color: white">Please entere your credentials</p>
+ 
+  <form>
+    <div class="user-box">
+      <input type="text" id="email" name="email" required="">
+      <label>Email</label>
+      <p id="emailError" style="color: red;"></p>
+    </div>
+    <div class="user-box">
+      <input type="password" id="password" name="password" required="">
+      <label>Password</label>
+       <p id="passwordError" style="color: red;"></p>
+    </div><center>
+    <a id="signInButton" href="#">
+           Signin
+       <span></span>
+    </a></center>
+    <p style="color: white;">Dont have an account? <a href="/profile/signup">Signup</a></p>
+  </form>
+</div>
+
+<script>
+
+    const signInForm = document.getElementById('signInForm');
+    const signInButton = document.getElementById('signInButton');
+
+    signInButton.addEventListener('click', function(event) {
+      event.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+
+        if (!isValidEmail(email)) {
+            alert('Please enter a valid email address.');
+            
+            emailError.textContent = 'Please enter a valid email address.';
+            return 
+
+        } else if (!isValidPassword(password)) {
+           
+            passwordError.textContent = 'Please enter a password.';
+           return
+        }else
+        {
+          fetch('/profile/verify', {
+            
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+
+                email: email,
+                password: password
+            })
+
+
+          }).then(response => response.json())
+            .then(data => {
+              
+                if (data.success) {
+                    window.location.href = '/home';
+                }else
+                {
+                  passwordError.textContent = 'Invalid email or password.'
+                  emailError.textContent = 'Invalid email or password.'
+                }
+
+            })
+        }
+    });
+
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function isValidPassword(password) {
+        return password !== '';
+    }
+</script>

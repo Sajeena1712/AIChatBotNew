@@ -1,0 +1,115 @@
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style/signup.css">
+<script src="https://cdn.jsdelivr.net/gh/cosmogicofficial/quantumalert@latest/minfile/quantumalert.js" charset="utf-8"></script>
+
+<div style="display: flex; align-items: center; justify-content: center; position: absolute; top: 0; left: 0; right: 0; bottom: 0;">
+<div class="form-box">
+     
+<form class="form"  id="myForm">
+    <span class="title">Sign up</span>
+    <span class="subtitle">Create a free account with your email.</span>
+    <div class="form-container">
+    <input type="text" id="fullName" name="fullName" class="input" placeholder="Full Name">
+    <div id="fullNameError" class="error"></div>
+    <input type="email" id="email" name="email" class="input" placeholder="Email">
+    <div id="emailError" class="error"></div>
+    <input type="password" id="password" name="password" class="input" placeholder="Password">
+    <div id="passwordError" class="error"></div>
+    <input type="password" id="confirmPassword" name="confirm_password" class="input" placeholder="Confirm Password">
+    </div>
+    <button type="submit">Sign up</button>
+</form>
+<div class="form-section">
+  <p>Have an account? <a href="/profile/login">Log in</a> </p>
+</div>
+</div>
+</div>
+
+<style>
+     .error {
+        color: red;
+    }
+</style>
+
+<script>
+    const form = document.getElementById('myForm');
+    const fullName = document.getElementById('fullName');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const fullNameError = document.getElementById('fullNameError');
+    const passwordError = document.getElementById('passwordError');
+    const emailError = document.getElementById('emailError');
+    const submit = document.querySelector('button[type="submit"]');
+
+    submit.addEventListener('click', function(event) {
+        event.preventDefault();
+        let isValid = true;
+     
+        
+        if (!fullName.value.trim()) {
+            fullNameError.textContent = 'Please enter your full name.';
+            isValid = false;
+        } else if (!/^[a-zA-Z\s]*$/.test(fullName.value.trim())) {
+            fullNameError.textContent = 'Name can only contain alphabets and spaces.';
+            isValid = false;
+        } else {
+            fullNameError.textContent = '';
+        }
+
+        if (!email.value.trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+            emailError.textContent = 'Invalid email address.';
+            isValid = false;
+        } else {
+            emailError.textContent = '';
+        }
+
+       
+        if (!password.value.trim()) {
+            passwordError.textContent = 'Please enter a password.';
+            isValid = false;
+        } else if (password.value.trim().length < 8) {
+            passwordError.textContent = 'Password must be at least 8 characters long.';
+            isValid = false;
+        } else if (!/\S/.test(password.value.trim())) {
+            passwordError.textContent = 'Password must not contain only white spaces.';
+            isValid = false;
+        } else if (password.value.trim() !== confirmPassword.value.trim()) {
+            passwordError.textContent = 'Passwords do not match.';
+            isValid = false;
+        } else {
+            passwordError.textContent = '';
+        }
+
+        if (!isValid) {
+            event.preventDefault(); // Prevent form submission if validation fails
+        }
+        else
+        {
+
+            fetch('/profile/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    fullName: fullName.value,
+                    email: email.value,
+                    password: password.value
+                })
+            }).then(response => response.json())
+                .then(data => {
+                    
+                    if (data.success) {
+
+                     Qual.successdb("Success","Account  created Successfully Login to your account");
+                    }else
+                    {
+                        Qual.errordb("Oh no !","Sorry this email has already registered ");
+                    }
+                })
+           
+        }
+
+    });
+</script>
